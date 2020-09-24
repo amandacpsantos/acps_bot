@@ -12,7 +12,7 @@ bot = telegram.Bot(token=TOKEN)
 app = Flask(__name__)
 
 # Set Database
-app.config['SQLALCHEMY_DATABASE_URI'] = ''
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@hostname/db_name'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -35,7 +35,6 @@ db.create_all()
 @app.route('/{}'.format(bot_token), methods=['POST'])
 def request_telegram():
     # Get Telegram object and attributes
-    print(request.__dict__)
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     msg_id = int(update.message.message_id)
     chat_id = int(update.message.chat.id)
@@ -101,7 +100,7 @@ def request_telegram():
 
 @app.route('/')
 def index():
-    hook = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
+    hook = bot.setWebhook('{URL}{TOKEN}'.format(URL=URL, TOKEN=TOKEN))
     text = """
     <h3>Telegram Bot  - Teste para Desenvolvedores Python (cloudia).</h3>
     <p>Github: <a href="https://github.com/amandacpsantos/acps_bot"> Teste para Desenvolvedores Python (cloudia).</a></p>
